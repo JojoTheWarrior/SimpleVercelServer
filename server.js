@@ -30,5 +30,6 @@ app.get('/', (req, res) => {
 })
 
 app.listen(PORT, () => {
+  document.getElementById("msg").innerHTML("opened");
   console.log(`Server is running on port ${PORT}`);
 });
