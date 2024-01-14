@@ -6,17 +6,28 @@ const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-let mostRecentNumber;
+let currentNumber = 0;
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 app.post('/storeNumber', (req, res) => {
   const { number } = req.body;
-  mostRecentNumber = number;
+  currentNumber = number;
   res.send('Number stored successfully!');
 });
 
 app.get('/getRecentNumber', (req, res) => {
-  res.json({ mostRecentNumber });
+  res.json({ mostRecentNumber: currentNumber });
 });
+
+app.get('/', (req, res) => {
+    res.json({ message: "you have visited the root!" });
+})
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
