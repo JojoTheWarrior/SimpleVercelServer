@@ -2,39 +2,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Use body-parser middleware to parse JSON requests
 app.use(bodyParser.json());
 
-// Your server logic here...
+let mostRecentNumber;
 
-// Store the received number
-let receivedNumber = 0;
-
-// Handle POST requests
-app.post('/update-number', (req, res) => {
-    const { number } = req.body;
-
-    console.log("houston we have received " + number);
-  
-    if (typeof number === 'number') {
-        receivedNumber = number;
-        res.json({ success: true, message: 'Number updated successfully.' });
-    } else {
-        res.status(400).json({ success: false, message: 'Invalid number format.' });
-    }
+app.post('/storeNumber', (req, res) => {
+  const { number } = req.body;
+  mostRecentNumber = number;
+  res.send('Number stored successfully!');
 });
 
-app.get('/get-number', (req, res) => {
-    res.json({ receivedNumber })
-})
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.get('/getRecentNumber', (req, res) => {
+  res.json({ mostRecentNumber });
 });
 
-app.get('/', (req, res) => {
-    res.send("hello, this is the root path! fuck you");
-})
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
